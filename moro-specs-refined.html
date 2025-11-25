@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLENN Specifications | MORO MOTION</title>
+    <meta name="description" content="Detailed technical specifications for GLENN humanoid robot - Performance, dimensions, capabilities, and system requirements.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #0a0e27;
+            --color-surface: #141b3a;
+            --color-elevated: #1a2340;
+            --color-text: #e8edf5;
+            --color-text-muted: #8b95b0;
+            --color-primary: #00fff5;
+            --color-secondary: #ff6b35;
+            --color-accent: #7c3aed;
+            --color-border: rgba(0, 255, 245, 0.15);
+            --color-glow: rgba(0, 255, 245, 0.3);
+            --gradient-primary: linear-gradient(135deg, #00fff5, #00d4ff);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #ff9a76);
+            --gradient-accent: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        [data-theme="light"] {
+            --color-bg: #ffffff;
+            --color-surface: #f8fafc;
+            --color-elevated: #f1f5f9;
+            --color-text: #0f172a;
+            --color-text-muted: #475569;
+            --color-primary: #0891b2;
+            --color-secondary: #ea580c;
+            --color-accent: #7c3aed;
+            --color-border: rgba(8, 145, 178, 0.2);
+            --color-glow: rgba(8, 145, 178, 0.15);
+            --gradient-primary: linear-gradient(135deg, #0891b2, #06b6d4);
+            --gradient-secondary: linear-gradient(135deg, #ea580c, #f97316);
+            --gradient-accent: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(var(--color-primary) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-primary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--gradient-primary);
+            top: -300px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--gradient-secondary);
+            bottom: -250px;
+            left: 50%;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(80px, -80px) scale(1.1); }
+            66% { transform: translate(-80px, 80px) scale(0.9); }
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        [data-theme="light"] header {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--color-text);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--color-elevated);
+            border-color: var(--color-secondary);
+            transform: rotate(180deg);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            padding: 10rem 0 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .model-viewer {
+            width: 100%;
+            height: 600px;
+            background: var(--color-surface);
+            border: 2px solid var(--color-secondary);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(255, 107, 53, 0.3);
+        }
+
+        .model-viewer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-secondary);
+            opacity: 0.05;
+            mix-blend-mode: overlay;
+        }
+
+        .model-placeholder {
+            text-align: center;
+            color: var(--color-text-muted);
+            z-index: 1;
+        }
+
+        .model-placeholder h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .spec-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-secondary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .spec-card:nth-child(even)::before {
+            background: var(--gradient-primary);
+        }
+
+        .spec-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .spec-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--color-secondary);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        }
+
+        .spec-label {
+            color: var(--color-secondary);
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .spec-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-text);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .spec-unit {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            margin-left: 0.5rem;
+        }
+
+        .content-section {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: -1px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            color: var(--color-text);
+        }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2rem 0;
+        }
+
+        .spec-table th,
+        .spec-table td {
+            padding: 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .spec-table th {
+            background: var(--color-elevated);
+            font-weight: 600;
+            color: var(--color-secondary);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .spec-table tr:hover {
+            background: var(--color-elevated);
+        }
+
+        .spec-table th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        .spec-table th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+
+        .download-section {
+            text-align: center;
+            padding: 3rem;
+            background: var(--color-surface);
+            border: 2px solid var(--color-secondary);
+            border-radius: 24px;
+            margin: 3rem 0;
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.2);
+        }
+
+        .download-section h2 {
+            margin-bottom: 1rem;
+        }
+
+        .download-section p {
+            color: var(--color-text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.125rem;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1.25rem;
+            background: var(--color-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            color: var(--color-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .download-btn:hover {
+            background: var(--color-surface);
+            border-color: var(--color-secondary);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(255, 107, 53, 0.2);
+        }
+
+        footer {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 6rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .footer-brand p {
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        .footer-section h4 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-secondary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--color-border);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .content-section {
+                padding: 2rem;
+            }
+
+            .model-viewer {
+                height: 400px;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">MORO MOTION</a>
+            <ul class="nav-menu">
+                <li><a href="specifications.html">Specs</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="investors.html">Investors</a></li>
+                <li><button class="theme-toggle" id="theme-toggle">🌙</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <div class="container">
+                <div class="section-label">[ TECHNICAL SPECIFICATIONS ]</div>
+                <h1><span class="gradient-text">GLENN</span></h1>
+                <p class="subtitle">Gait Learning and Evaluation using Neural Networking</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- 3D Model Viewer -->
+            <div class="model-viewer reveal">
+                <div class="model-placeholder">
+                    <h3>Interactive 3D Model</h3>
+                    <p style="font-size: 1.125rem;">Rotate • Zoom • Explore GLENN's Design</p>
+                    <p style="margin-top: 2rem; font-size: 3rem;">🤖</p>
+                    <p style="margin-top: 1rem; font-size: 0.875rem; opacity: 0.6;">[3D Model Viewer - Integration Ready]</p>
+                </div>
+            </div>
+
+            <!-- Key Specifications Grid -->
+            <div class="section-label reveal">[ KEY SPECIFICATIONS ]</div>
+            <div class="spec-grid">
+                <div class="spec-card reveal">
+                    <div class="spec-label">Height</div>
+                    <div class="spec-value">180<span class="spec-unit">cm</span></div>
+                </div>
+                <div class="spec-card reveal">
+                    <div class="spec-label">Weight</div>
+                    <div class="spec-value">75<span class="spec-unit">kg</span></div>
+                </div>
+                <div class="spec-card reveal">
+                    <div class="spec-label">Battery Life</div>
+                    <div class="spec-value">2-4<span class="spec-unit">hrs</span></div>
+                </div>
+                <div class="spec-card reveal">
+                    <div class="spec-label">Max Speed</div>
+                    <div class="spec-value">1.5<span class="spec-unit">m/s</span></div>
+                </div>
+                <div class="spec-card reveal">
+                    <div class="spec-label">Payload</div>
+                    <div class="spec-value">15<span class="spec-unit">kg</span></div>
+                </div>
+                <div class="spec-card reveal">
+                    <div class="spec-label">DOF</div>
+                    <div class="spec-value">28</div>
+                </div>
+                <div class="spec-card reveal">
+                    <div class="spec-label">Operating Temp</div>
+                    <div class="spec-value">-10 to 45<span class="spec-unit">°C</span></div>
+                </div>
+                <div class="spec-card reveal">
+                    <div class="spec-label">Power</div>
+                    <div class="spec-value">24<span class="spec-unit">V</span></div>
+                </div>
+            </div>
+
+            <!-- Detailed Specifications -->
+            <div class="content-section reveal">
+                <h2><span class="gradient-text">Mechanical</span> Systems</h2>
+                <table class="spec-table">
+                    <tr>
+                        <th>Component</th>
+                        <th>Specification</th>
+                    </tr>
+                    <tr>
+                        <td>Total Motors</td>
+                        <td>10+ synchronous cycloidal drive motors</td>
+                    </tr>
+                    <tr>
+                        <td>Actuators - Arms</td>
+                        <td>High-torque servo motors (12 N⋅m peak)</td>
+                    </tr>
+                    <tr>
+                        <td>Actuators - Legs</td>
+                        <td>Synchronous motors (45 N⋅m peak)</td>
+                    </tr>
+                    <tr>
+                        <td>Actuators - Core</td>
+                        <td>Torso stabilization system (30 N⋅m)</td>
+                    </tr>
+                    <tr>
+                        <td>Joint Range - Shoulder</td>
+                        <td>360° rotation, 180° abduction</td>
+                    </tr>
+                    <tr>
+                        <td>Joint Range - Hip</td>
+                        <td>120° flexion/extension, 90° abduction</td>
+                    </tr>
+                    <tr>
+                        <td>Foot Contact Sensors</td>
+                        <td>4-point force distribution sensing</td>
+                    </tr>
+                </table>
+
+                <h3>Computing & AI</h3>
+                <table class="spec-table">
+                    <tr>
+                        <th>Component</th>
+                        <th>Specification</th>
+                    </tr>
+                    <tr>
+                        <td>Main Processor</td>
+                        <td>LattePanda 3 Delta (Intel Celeron N5105)</td>
+                    </tr>
+                    <tr>
+                        <td>AI Accelerator</td>
+                        <td>External GPU module for neural network inference</td>
+                    </tr>
+                    <tr>
+                        <td>RAM</td>
+                        <td>8 GB LPDDR4</td>
+                    </tr>
+                    <tr>
+                        <td>Storage</td>
+                        <td>64 GB eMMC + microSD expansion</td>
+                    </tr>
+                    <tr>
+                        <td>Training Framework</td>
+                        <td>NVIDIA Isaac Lab/Sim with PPO algorithm</td>
+                    </tr>
+                    <tr>
+                        <td>Control Frequency</td>
+                        <td>200 Hz low-level control, 30 Hz planning</td>
+                    </tr>
+                </table>
+
+                <h3>Sensors & Perception</h3>
+                <table class="spec-table">
+                    <tr>
+                        <th>Component</th>
+                        <th>Specification</th>
+                    </tr>
+                    <tr>
+                        <td>Primary Vision</td>
+                        <td>Stereo RGB cameras (1080p, 60fps)</td>
+                    </tr>
+                    <tr>
+                        <td>Depth Sensing</td>
+                        <td>Time-of-flight (ToF) sensors</td>
+                    </tr>
+                    <tr>
+                        <td>LiDAR (Optional)</td>
+                        <td>2D scanning LiDAR, 12m range</td>
+                    </tr>
+                    <tr>
+                        <td>IMU</td>
+                        <td>9-axis inertial measurement unit</td>
+                    </tr>
+                    <tr>
+                        <td>Force/Torque</td>
+                        <td>Joint-level force sensing in all actuators</td>
+                    </tr>
+                    <tr>
+                        <td>Environmental</td>
+                        <td>Temperature, humidity, gas sensors</td>
+                    </tr>
+                </table>
+
+                <h3>Power & Battery</h3>
+                <table class="spec-table">
+                    <tr>
+                        <th>Component</th>
+                        <th>Specification</th>
+                    </tr>
+                    <tr>
+                        <td>Battery Type</td>
+                        <td>Lithium-ion rechargeable pack</td>
+                    </tr>
+                    <tr>
+                        <td>Voltage</td>
+                        <td>24V DC system</td>
+                    </tr>
+                    <tr>
+                        <td>Capacity</td>
+                        <td>2.4 kWh</td>
+                    </tr>
+                    <tr>
+                        <td>Charge Time</td>
+                        <td>2 hours (fast charge), 4 hours (standard)</td>
+                    </tr>
+                    <tr>
+                        <td>Power Consumption</td>
+                        <td>600-800W (active), 200W (idle)</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Download Section -->
+            <div class="download-section reveal">
+                <h2><span class="gradient-text">Technical</span> Documentation</h2>
+                <p>Access detailed specifications, CAD files, and integration guides</p>
+                <div class="download-grid">
+                    <a href="#" class="download-btn">
+                        📄 Specification Sheet
+                    </a>
+                    <a href="#" class="download-btn">
+                        📐 CAD Models
+                    </a>
+                    <a href="#" class="download-btn">
+                        🔧 Integration Guide
+                    </a>
+                    <a href="#" class="download-btn">
+                        💻 API Documentation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">MORO MOTION</div>
+                <p>Engineering safer futures through humanoid robotics for extreme environments.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Product</h4>
+                <div class="footer-links">
+                    <a href="specifications.html">Specifications</a>
+                    <a href="resources.html">Resources</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <div class="footer-links">
+                    <a href="news.html">News</a>
+                    <a href="investors.html">Investors</a>
+                    <a href="index.html">About</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <div class="footer-links">
+                    <a href="mailto:contact@moromotion.com">Contact</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Moro Motion. All rights reserved. | Auburn University | NVA Accelerator</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            const toggle = document.getElementById('theme-toggle');
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            toggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-toggle').textContent = savedTheme === 'light' ? '🌙' : '☀️';
+        });
+
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', reveal);
+        reveal();
+    </script>
+</body>
+</html>

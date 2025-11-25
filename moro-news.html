@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Updates | MORO MOTION</title>
+    <meta name="description" content="Latest developments, announcements, and updates from Moro Motion and GLENN humanoid robot.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #0a0e27;
+            --color-surface: #141b3a;
+            --color-elevated: #1a2340;
+            --color-text: #e8edf5;
+            --color-text-muted: #8b95b0;
+            --color-primary: #00fff5;
+            --color-secondary: #ff6b35;
+            --color-accent: #7c3aed;
+            --color-border: rgba(0, 255, 245, 0.15);
+            --color-glow: rgba(0, 255, 245, 0.3);
+            --gradient-primary: linear-gradient(135deg, #00fff5, #00d4ff);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #ff9a76);
+            --gradient-accent: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        [data-theme="light"] {
+            --color-bg: #ffffff;
+            --color-surface: #f8fafc;
+            --color-elevated: #f1f5f9;
+            --color-text: #0f172a;
+            --color-text-muted: #475569;
+            --color-primary: #0891b2;
+            --color-secondary: #ea580c;
+            --color-accent: #7c3aed;
+            --color-border: rgba(8, 145, 178, 0.2);
+            --color-glow: rgba(8, 145, 178, 0.15);
+            --gradient-primary: linear-gradient(135deg, #0891b2, #06b6d4);
+            --gradient-secondary: linear-gradient(135deg, #ea580c, #f97316);
+            --gradient-accent: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(var(--color-primary) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-primary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--gradient-primary);
+            top: -300px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--gradient-secondary);
+            bottom: -250px;
+            left: 50%;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(80px, -80px) scale(1.1); }
+            66% { transform: translate(-80px, 80px) scale(0.9); }
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        [data-theme="light"] header {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--color-text);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--color-elevated);
+            border-color: var(--color-secondary);
+            transform: rotate(180deg);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            padding: 10rem 0 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+        }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .featured-news {
+            background: var(--color-surface);
+            border: 2px solid var(--color-secondary);
+            border-radius: 24px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-news::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-secondary);
+            opacity: 0.05;
+            mix-blend-mode: overlay;
+        }
+
+        .featured-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .news-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--gradient-primary);
+            color: #0a0e27;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .news-date {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .news-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .news-excerpt {
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+        }
+
+        .read-more {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .read-more:hover {
+            transform: translateX(5px);
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .news-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .news-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--color-secondary);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        }
+
+        .news-image {
+            height: 200px;
+            background: var(--color-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .news-content {
+            padding: 2rem;
+        }
+
+        .newsletter-section {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .newsletter-form {
+            max-width: 500px;
+            margin: 2rem auto 0;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            color: var(--color-text);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .subscribe-btn {
+            padding: 1rem 2rem;
+            background: var(--gradient-primary);
+            color: #0a0e27;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 255, 245, 0.3);
+        }
+
+        footer {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 6rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .footer-brand p {
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        .footer-section h4 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-secondary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--color-border);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">MORO MOTION</a>
+            <ul class="nav-menu">
+                <li><a href="specifications.html">Specs</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="investors.html">Investors</a></li>
+                <li><button class="theme-toggle" id="theme-toggle">🌙</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <div class="container">
+                <div class="section-label">[ NEWS & UPDATES ]</div>
+                <h1><span class="gradient-text">Latest</span> Developments</h1>
+                <p class="subtitle">Stay informed about Moro Motion's progress and announcements</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Featured News -->
+            <div class="featured-news reveal">
+                <div class="featured-content">
+                    <span class="news-tag">ANNOUNCEMENT</span>
+                    <div class="news-date">January 15, 2025</div>
+                    <h2 class="news-title">GLENN Completes Successful Field Testing Phase</h2>
+                    <p class="news-excerpt">
+                        Moro Motion announces completion of intensive field testing for GLENN, our humanoid robot designed for hazardous environments. Testing included simulated bomb disposal scenarios, terrain navigation challenges, and extended autonomy trials. Results exceeded expectations across all performance metrics.
+                    </p>
+                    <a href="#" class="read-more">Read Full Article →</a>
+                </div>
+            </div>
+
+            <!-- News Grid -->
+            <div class="news-grid">
+                <div class="news-card reveal">
+                    <div class="news-image">🏆</div>
+                    <div class="news-content">
+                        <span class="news-tag">ACHIEVEMENT</span>
+                        <div class="news-date">December 20, 2024</div>
+                        <h3 class="news-title">Moro Motion Awarded NVA Innovation Grant</h3>
+                        <p class="news-excerpt">
+                            We're honored to receive the New Venture Accelerator's Innovation Grant, supporting further development of GLENN's AI capabilities and autonomous navigation systems.
+                        </p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </div>
+
+                <div class="news-card reveal">
+                    <div class="news-image">🤝</div>
+                    <div class="news-content">
+                        <span class="news-tag">PARTNERSHIP</span>
+                        <div class="news-date">December 5, 2024</div>
+                        <h3 class="news-title">Auburn University Partnership Strengthened</h3>
+                        <p class="news-excerpt">
+                            Expanded collaboration with Auburn's Robotics Lab provides access to advanced testing facilities and research expertise for GLENN development.
+                        </p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </div>
+
+                <div class="news-card reveal">
+                    <div class="news-image">💡</div>
+                    <div class="news-content">
+                        <span class="news-tag">TECHNOLOGY</span>
+                        <div class="news-date">November 18, 2024</div>
+                        <h3 class="news-title">New AI Training Framework Achieves 40% Faster Learning</h3>
+                        <p class="news-excerpt">
+                            Our enhanced PPO algorithm implementation in NVIDIA Isaac Sim has dramatically reduced training time for complex navigation behaviors.
+                        </p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </div>
+
+                <div class="news-card reveal">
+                    <div class="news-image">🎬</div>
+                    <div class="news-content">
+                        <span class="news-tag">MEDIA</span>
+                        <div class="news-date">November 3, 2024</div>
+                        <h3 class="news-title">GLENN Featured in Robotics Engineering Journal</h3>
+                        <p class="news-excerpt">
+                            Our approach to humanoid robotics for hazardous environments is highlighted in this month's issue, focusing on modular design advantages.
+                        </p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </div>
+
+                <div class="news-card reveal">
+                    <div class="news-image">👥</div>
+                    <div class="news-content">
+                        <span class="news-tag">TEAM</span>
+                        <div class="news-date">October 15, 2024</div>
+                        <h3 class="news-title">Expanding Our Advisory Board</h3>
+                        <p class="news-excerpt">
+                            Welcome to our newest advisors bringing decades of experience in robotics, AI, and defense applications to guide GLENN's development.
+                        </p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </div>
+
+                <div class="news-card reveal">
+                    <div class="news-image">🔬</div>
+                    <div class="news-content">
+                        <span class="news-tag">RESEARCH</span>
+                        <div class="news-date">September 28, 2024</div>
+                        <h3 class="news-title">Breakthrough in Cycloidal Drive Motor Efficiency</h3>
+                        <p class="news-excerpt">
+                            Our engineering team achieved 15% improvement in motor efficiency through innovative gearbox design, extending GLENN's operational time.
+                        </p>
+                        <a href="#" class="read-more">Read more →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter Signup -->
+            <div class="newsletter-section reveal">
+                <h2><span class="gradient-text">Stay Updated</span></h2>
+                <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Subscribe to receive the latest news and updates from Moro Motion</p>
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                    <button type="submit" class="subscribe-btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">MORO MOTION</div>
+                <p>Engineering safer futures through humanoid robotics for extreme environments.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Product</h4>
+                <div class="footer-links">
+                    <a href="specifications.html">Specifications</a>
+                    <a href="resources.html">Resources</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <div class="footer-links">
+                    <a href="news.html">News</a>
+                    <a href="investors.html">Investors</a>
+                    <a href="index.html">About</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <div class="footer-links">
+                    <a href="mailto:contact@moromotion.com">Contact</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Moro Motion. All rights reserved. | Auburn University | NVA Accelerator</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            const toggle = document.getElementById('theme-toggle');
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            toggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-toggle').textContent = savedTheme === 'light' ? '🌙' : '☀️';
+        });
+
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+        // Reveal animation
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', reveal);
+        reveal();
+    </script>
+</body>
+</html>

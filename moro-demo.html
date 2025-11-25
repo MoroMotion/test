@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request a Demo | MORO MOTION</title>
+    <meta name="description" content="Schedule a personalized demonstration of GLENN humanoid robot for your organization.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #0a0e27;
+            --color-surface: #141b3a;
+            --color-elevated: #1a2340;
+            --color-text: #e8edf5;
+            --color-text-muted: #8b95b0;
+            --color-primary: #00fff5;
+            --color-secondary: #ff6b35;
+            --color-accent: #7c3aed;
+            --color-border: rgba(0, 255, 245, 0.15);
+            --color-glow: rgba(0, 255, 245, 0.3);
+            --gradient-primary: linear-gradient(135deg, #00fff5, #00d4ff);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #ff9a76);
+            --gradient-accent: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        [data-theme="light"] {
+            --color-bg: #ffffff;
+            --color-surface: #f8fafc;
+            --color-elevated: #f1f5f9;
+            --color-text: #0f172a;
+            --color-text-muted: #475569;
+            --color-primary: #0891b2;
+            --color-secondary: #ea580c;
+            --color-accent: #7c3aed;
+            --color-border: rgba(8, 145, 178, 0.2);
+            --color-glow: rgba(8, 145, 178, 0.15);
+            --gradient-primary: linear-gradient(135deg, #0891b2, #06b6d4);
+            --gradient-secondary: linear-gradient(135deg, #ea580c, #f97316);
+            --gradient-accent: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(var(--color-primary) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-primary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--gradient-primary);
+            top: -300px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--gradient-secondary);
+            bottom: -250px;
+            left: 50%;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(80px, -80px) scale(1.1); }
+            66% { transform: translate(-80px, 80px) scale(0.9); }
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        [data-theme="light"] header {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--color-text);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--color-elevated);
+            border-color: var(--color-secondary);
+            transform: rotate(180deg);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            padding: 10rem 0 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+        }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 3rem 0;
+        }
+
+        .info-section {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .info-card {
+            background: var(--color-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateX(8px);
+            border-color: var(--color-primary);
+        }
+
+        .info-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .benefit-list li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .benefit-list li:last-child {
+            border-bottom: none;
+        }
+
+        .benefit-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .demo-form {
+            background: var(--color-surface);
+            border: 2px solid var(--color-secondary);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--color-text);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            background: var(--color-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            color: var(--color-text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(0, 255, 245, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            text-transform: none;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--gradient-primary);
+            color: #0a0e27;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 255, 245, 0.3);
+        }
+
+        .form-note {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            text-align: center;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        footer {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 6rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .footer-brand p {
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        .footer-section h4 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-secondary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--color-border);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">MORO MOTION</a>
+            <ul class="nav-menu">
+                <li><a href="specifications.html">Specs</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="investors.html">Investors</a></li>
+                <li><button class="theme-toggle" id="theme-toggle">🌙</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <div class="container">
+                <div class="section-label">[ REQUEST A DEMO ]</div>
+                <h1>Experience <span class="gradient-text">GLENN</span> in Action</h1>
+                <p class="subtitle">Schedule a personalized demonstration</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="demo-container">
+                <!-- Left Column: Info -->
+                <div>
+                    <div class="info-section reveal">
+                        <h2>What to Expect</h2>
+                        
+                        <div class="info-card">
+                            <h3>🎥 Virtual Demo</h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.875rem;">
+                                45-minute live video session with our technical team showcasing GLENN's capabilities
+                            </p>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>🏭 In-Person Demo</h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.875rem;">
+                                Visit our facility at Auburn University to interact with GLENN and see it in operation
+                            </p>
+                        </div>
+
+                        <div class="info-card">
+                            <h3>💼 Custom Consultation</h3>
+                            <p style="color: var(--color-text-muted); font-size: 0.875rem;">
+                                Tailored presentation focused on your specific use case and requirements
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="info-section reveal">
+                        <h2>Demo Includes</h2>
+                        <ul class="benefit-list">
+                            <li>Live demonstration of GLENN's mobility and navigation</li>
+                            <li>Overview of AI capabilities and learning systems</li>
+                            <li>Technical specifications discussion</li>
+                            <li>Application-specific use case examples</li>
+                            <li>Integration and deployment planning</li>
+                            <li>Q&A with engineering team</li>
+                            <li>Customized ROI analysis</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Column: Form -->
+                <div>
+                    <div class="demo-form reveal">
+                        <h2>Request Your Demo</h2>
+                        <form id="demo-form">
+                            <div class="form-group">
+                                <label>First Name *</label>
+                                <input type="text" name="firstName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Last Name *</label>
+                                <input type="text" name="lastName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email *</label>
+                                <input type="email" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" name="phone">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Company/Organization *</label>
+                                <input type="text" name="company" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Job Title</label>
+                                <input type="text" name="jobTitle">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Industry *</label>
+                                <select name="industry" required>
+                                    <option value="">Select industry</option>
+                                    <option value="eod">Explosive Ordnance Disposal</option>
+                                    <option value="emergency">Emergency Response</option>
+                                    <option value="defense">Defense & Military</option>
+                                    <option value="hazmat">Hazardous Materials</option>
+                                    <option value="research">Research & Education</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Preferred Demo Type *</label>
+                                <select name="demoType" required>
+                                    <option value="">Select demo type</option>
+                                    <option value="virtual">Virtual Demo (Video Call)</option>
+                                    <option value="in-person">In-Person at Auburn</option>
+                                    <option value="onsite">On-Site at My Facility</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Primary Interest</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="bomb" name="interest" value="bomb">
+                                        <label for="bomb">Bomb Disposal</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="disaster" name="interest" value="disaster">
+                                        <label for="disaster">Disaster Response</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="hazmat" name="interest" value="hazmat">
+                                        <label for="hazmat">Hazardous Materials</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="research" name="interest" value="research">
+                                        <label for="research">Research & Development</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Additional Information</label>
+                                <textarea name="message" placeholder="Tell us more about your use case and specific requirements..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Preferred Date Range</label>
+                                <input type="date" name="preferredDate">
+                            </div>
+
+                            <button type="submit" class="submit-btn">
+                                Submit Demo Request
+                            </button>
+
+                            <p class="form-note">
+                                We'll contact you within 1 business day to schedule your demo
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">MORO MOTION</div>
+                <p>Engineering safer futures through humanoid robotics for extreme environments.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Product</h4>
+                <div class="footer-links">
+                    <a href="specifications.html">Specifications</a>
+                    <a href="resources.html">Resources</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <div class="footer-links">
+                    <a href="news.html">News</a>
+                    <a href="investors.html">Investors</a>
+                    <a href="index.html">About</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <div class="footer-links">
+                    <a href="mailto:contact@moromotion.com">Contact</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Moro Motion. All rights reserved. | Auburn University | NVA Accelerator</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            const toggle = document.getElementById('theme-toggle');
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            toggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-toggle').textContent = savedTheme === 'light' ? '🌙' : '☀️';
+        });
+
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+        // Form submission
+        document.getElementById('demo-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your interest! We will contact you within 1 business day.');
+            // Add your form submission logic here
+        });
+
+        // Reveal animation
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', reveal);
+        reveal();
+    </script>
+</body>
+</html>

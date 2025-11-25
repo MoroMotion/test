@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources & Documentation | MORO MOTION</title>
+    <meta name="description" content="Access technical documentation, guides, videos, and case studies for GLENN humanoid robot.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #0a0e27;
+            --color-surface: #141b3a;
+            --color-elevated: #1a2340;
+            --color-text: #e8edf5;
+            --color-text-muted: #8b95b0;
+            --color-primary: #00fff5;
+            --color-secondary: #ff6b35;
+            --color-accent: #7c3aed;
+            --color-border: rgba(0, 255, 245, 0.15);
+            --color-glow: rgba(0, 255, 245, 0.3);
+            --gradient-primary: linear-gradient(135deg, #00fff5, #00d4ff);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #ff9a76);
+            --gradient-accent: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        [data-theme="light"] {
+            --color-bg: #ffffff;
+            --color-surface: #f8fafc;
+            --color-elevated: #f1f5f9;
+            --color-text: #0f172a;
+            --color-text-muted: #475569;
+            --color-primary: #0891b2;
+            --color-secondary: #ea580c;
+            --color-accent: #7c3aed;
+            --color-border: rgba(8, 145, 178, 0.2);
+            --color-glow: rgba(8, 145, 178, 0.15);
+            --gradient-primary: linear-gradient(135deg, #0891b2, #06b6d4);
+            --gradient-secondary: linear-gradient(135deg, #ea580c, #f97316);
+            --gradient-accent: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(var(--color-primary) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-primary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--gradient-primary);
+            top: -300px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--gradient-secondary);
+            bottom: -250px;
+            left: 50%;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(80px, -80px) scale(1.1); }
+            66% { transform: translate(-80px, 80px) scale(0.9); }
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        [data-theme="light"] header {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--color-text);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--color-elevated);
+            border-color: var(--color-secondary);
+            transform: rotate(180deg);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            padding: 10rem 0 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+
+        .filter-tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 50px;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filter-tab:hover,
+        .filter-tab.active {
+            background: var(--gradient-primary);
+            color: #0a0e27;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .resource-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-secondary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .resource-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--color-secondary);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        }
+
+        .resource-thumbnail {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--color-primary);
+            color: #0a0e27;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .resource-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+
+        .resource-description {
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .resource-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .faq-section {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin: 4rem 0;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            letter-spacing: -1px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--color-border);
+            padding: 1.5rem 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: var(--color-text);
+            transition: color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: var(--color-primary);
+        }
+
+        .faq-question span:last-child {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question span:last-child {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-top: 1rem;
+        }
+
+        footer {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 6rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .footer-brand p {
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        .footer-section h4 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-secondary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--color-border);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-section {
+                padding: 2rem;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <header>
+        <nav>
+            <a href="index.html" class="logo">MORO MOTION</a>
+            <ul class="nav-menu">
+                <li><a href="specifications.html">Specs</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="investors.html">Investors</a></li>
+                <li><button class="theme-toggle" id="theme-toggle">🌙</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <div class="container">
+                <div class="section-label">[ RESOURCES & DOCUMENTATION ]</div>
+                <h1><span class="gradient-text">Knowledge</span> Center</h1>
+                <p class="subtitle">Access technical documentation, guides, videos, and case studies for GLENN</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All Resources</button>
+                <button class="filter-tab" data-filter="documentation">Documentation</button>
+                <button class="filter-tab" data-filter="videos">Videos</button>
+                <button class="filter-tab" data-filter="case-studies">Case Studies</button>
+                <button class="filter-tab" data-filter="guides">Guides</button>
+                <button class="filter-tab" data-filter="api">API & SDK</button>
+            </div>
+
+            <!-- Resource Grid -->
+            <div class="resource-grid">
+                <!-- Documentation Resources -->
+                <div class="resource-card reveal" data-category="documentation">
+                    <div class="resource-thumbnail">📘</div>
+                    <div class="resource-content">
+                        <span class="resource-type">Documentation</span>
+                        <h3 class="resource-title">GLENN Technical Manual</h3>
+                        <p class="resource-description">Complete technical documentation covering hardware, software, and integration procedures.</p>
+                        <div class="resource-meta">
+                            <span>📄 PDF</span>
+                            <span>125 pages</span>
+                            <span>Updated Jan 2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card reveal" data-category="documentation">
+                    <div class="resource-thumbnail">🔧</div>
+                    <div class="resource-content">
+                        <span class="resource-type">Documentation</span>
+                        <h3 class="resource-title">Maintenance Guide</h3>
+                        <p class="resource-description">Step-by-step maintenance procedures, troubleshooting, and service schedules.</p>
+                        <div class="resource-meta">
+                            <span>📄 PDF</span>
+                            <span>45 pages</span>
+                            <span>Updated Dec 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Resources -->
+                <div class="resource-card reveal" data-category="videos">
+                    <div class="resource-thumbnail">🎥</div>
+                    <div class="resource-content">
+                        <span class="resource-type" style="background: #ef4444;">Video</span>
+                        <h3 class="resource-title">Getting Started with GLENN</h3>
+                        <p class="resource-description">Introduction to GLENN's capabilities, setup procedures, and basic operations.</p>
+                        <div class="resource-meta">
+                            <span>▶️ 15 min</span>
+                            <span>1080p</span>
+                            <span>Dec 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card reveal" data-category="videos">
+                    <div class="resource-thumbnail">🎬</div>
+                    <div class="resource-content">
+                        <span class="resource-type" style="background: #ef4444;">Video</span>
+                        <h3 class="resource-title">GLENN Locomotion Demo</h3>
+                        <p class="resource-description">Watch GLENN navigate complex terrain, stairs, and obstacles in real-time.</p>
+                        <div class="resource-meta">
+                            <span>▶️ 8 min</span>
+                            <span>4K</span>
+                            <span>Nov 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card reveal" data-category="videos">
+                    <div class="resource-thumbnail">📹</div>
+                    <div class="resource-content">
+                        <span class="resource-type" style="background: #ef4444;">Video</span>
+                        <h3 class="resource-title">AI Training Process</h3>
+                        <p class="resource-description">Behind-the-scenes look at how GLENN learns using NVIDIA Isaac Sim and PPO.</p>
+                        <div class="resource-meta">
+                            <span>▶️ 12 min</span>
+                            <span>1080p</span>
+                            <span>Oct 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Studies -->
+                <div class="resource-card reveal" data-category="case-studies">
+                    <div class="resource-thumbnail">📊</div>
+                    <div class="resource-content">
+                        <span class="resource-type" style="background: #8b5cf6;">Case Study</span>
+                        <h3 class="resource-title">EOD Field Testing Results</h3>
+                        <p class="resource-description">Analysis of GLENN's performance in simulated bomb disposal scenarios.</p>
+                        <div class="resource-meta">
+                            <span>📄 PDF</span>
+                            <span>28 pages</span>
+                            <span>Nov 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card reveal" data-category="case-studies">
+                    <div class="resource-thumbnail">📈</div>
+                    <div class="resource-content">
+                        <span class="resource-type" style="background: #8b5cf6;">Case Study</span>
+                        <h3 class="resource-title">Disaster Response Simulation</h3>
+                        <p class="resource-description">Performance metrics from search and rescue training exercises.</p>
+                        <div class="resource-meta">
+                            <span>📄 PDF</span>
+                            <span>35 pages</span>
+                            <span>Sep 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guides -->
+                <div class="resource-card reveal" data-category="guides">
+                    <div class="resource-thumbnail">📖</div>
+                    <div class="resource-content">
+                        <span class="resource-type" style="background: #10b981;">Guide</span>
+                        <h3 class="resource-title">Quick Start Guide</h3>
+                        <p class="resource-description">Get GLENN up and running in under 30 minutes with this concise guide.</p>
+                        <div class="resource-meta">
+                            <span>📄 PDF</span>
+                            <span>12 pages</span>
+                            <span>Jan 2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card reveal" data-category="guides">
+                    <div class="resource-thumbnail">🎓</div>
+                    <div class="resource-content">
+                        <span class="resource-type" style="background: #10b981;">Guide</span>
+                        <h3 class="resource-title">Integration Best Practices</h3>
+                        <p class="resource-description">Recommended workflows for integrating GLENN into existing operations.</p>
+                        <div class="resource-meta">
+                            <span>📄 PDF</span>
+                            <span>42 pages</span>
+                            <span>Dec 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API & SDK -->
+                <div class="resource-card reveal" data-category="api">
+                    <div class="resource-thumbnail">💻</div>
+                    <div class="resource-content">
+                        <span class="resource-type" style="background: #f59e0b;">API</span>
+                        <h3 class="resource-title">Python SDK Documentation</h3>
+                        <p class="resource-description">Full API reference for controlling GLENN programmatically with Python.</p>
+                        <div class="resource-meta">
+                            <span>🌐 Web</span>
+                            <span>Interactive</span>
+                            <span>v2.1</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card reveal" data-category="api">
+                    <div class="resource-thumbnail">⚙️</div>
+                    <div class="resource-content">
+                        <span class="resource-type" style="background: #f59e0b;">API</span>
+                        <h3 class="resource-title">ROS2 Integration Package</h3>
+                        <p class="resource-description">Official ROS2 packages for GLENN control and sensor data access.</p>
+                        <div class="resource-meta">
+                            <span>💾 GitHub</span>
+                            <span>Open Source</span>
+                            <span>v1.5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card reveal" data-category="api">
+                    <div class="resource-thumbnail">🔌</div>
+                    <div class="resource-content">
+                        <span class="resource-type" style="background: #f59e0b;">API</span>
+                        <h3 class="resource-title">REST API Reference</h3>
+                        <p class="resource-description">HTTP API for remote monitoring and control of GLENN systems.</p>
+                        <div class="resource-meta">
+                            <span>🌐 Web</span>
+                            <span>Interactive</span>
+                            <span>v3.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section reveal">
+                <h2><span class="gradient-text">Frequently Asked</span> Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What programming languages can I use with GLENN?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        GLENN supports Python (primary), C++, and JavaScript through our official SDKs. We also provide ROS2 integration packages for robotics developers.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How often is GLENN's software updated?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        We release quarterly major updates with new features and improvements. Security patches and bug fixes are released monthly. All updates are backward compatible.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Is training required to operate GLENN?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Basic operations can be learned in a few hours using our Quick Start Guide. Advanced features and mission planning typically require 2-3 days of training, which we provide to all customers.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What support options are available?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        We offer 24/7 technical support via email and phone, quarterly maintenance visits, and access to our customer portal with documentation and community forums.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can GLENN operate in extreme environments?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, GLENN is designed for extreme conditions including temperatures from -10°C to 45°C, dust, rain, and rough terrain. For specialized environments, custom configurations are available.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">MORO MOTION</div>
+                <p>Engineering safer futures through humanoid robotics for extreme environments.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Product</h4>
+                <div class="footer-links">
+                    <a href="specifications.html">Specifications</a>
+                    <a href="resources.html">Resources</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <div class="footer-links">
+                    <a href="news.html">News</a>
+                    <a href="investors.html">Investors</a>
+                    <a href="index.html">About</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <div class="footer-links">
+                    <a href="mailto:contact@moromotion.com">Contact</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Moro Motion. All rights reserved. | Auburn University | NVA Accelerator</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            const toggle = document.getElementById('theme-toggle');
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            toggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-toggle').textContent = savedTheme === 'light' ? '🌙' : '☀️';
+        });
+
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+        // Filter functionality
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const resourceCards = document.querySelectorAll('.resource-card');
+
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const filter = tab.getAttribute('data-filter');
+                
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                resourceCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // FAQ toggle
+        function toggleFAQ(element) {
+            const faqItem = element.parentElement;
+            faqItem.classList.toggle('active');
+        }
+
+        // Reveal animation
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', reveal);
+        reveal();
+    </script>
+</body>
+</html>

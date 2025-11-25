@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MORO MOTION | Humanoid Robotics for Extreme Environments</title>
+    <meta name="description" content="Engineering humanoid robots that save lives in the world's most dangerous environments.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #0a0e27;
+            --color-surface: #141b3a;
+            --color-elevated: #1a2340;
+            --color-text: #e8edf5;
+            --color-text-muted: #8b95b0;
+            --color-primary: #00fff5;
+            --color-secondary: #ff6b35;
+            --color-accent: #7c3aed;
+            --color-border: rgba(0, 255, 245, 0.15);
+            --color-glow: rgba(0, 255, 245, 0.3);
+            --gradient-primary: linear-gradient(135deg, #00fff5, #00d4ff);
+            --gradient-secondary: linear-gradient(135deg, #ff6b35, #ff9a76);
+            --gradient-accent: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        [data-theme="light"] {
+            --color-bg: #ffffff;
+            --color-surface: #f8fafc;
+            --color-elevated: #f1f5f9;
+            --color-text: #0f172a;
+            --color-text-muted: #475569;
+            --color-primary: #0891b2;
+            --color-secondary: #ea580c;
+            --color-accent: #7c3aed;
+            --color-border: rgba(8, 145, 178, 0.2);
+            --color-glow: rgba(8, 145, 178, 0.15);
+            --gradient-primary: linear-gradient(135deg, #0891b2, #06b6d4);
+            --gradient-secondary: linear-gradient(135deg, #ea580c, #f97316);
+            --gradient-accent: linear-gradient(135deg, #7c3aed, #a78bfa);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(var(--color-primary) 1px, transparent 1px),
+                linear-gradient(90deg, var(--color-primary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--gradient-primary);
+            top: -300px;
+            right: -200px;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--gradient-secondary);
+            bottom: -250px;
+            left: 50%;
+            animation-delay: 8s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: var(--gradient-accent);
+            top: 50%;
+            left: 50%;
+            animation-delay: 15s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(80px, -80px) scale(1.1); }
+            66% { transform: translate(-80px, 80px) scale(0.9); }
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        header.scrolled {
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        [data-theme="light"] header.scrolled {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--color-text);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--color-elevated);
+            border-color: var(--color-secondary);
+            transform: rotate(180deg);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.875rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: #0a0e27;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 255, 245, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--color-secondary);
+            color: var(--color-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-secondary);
+            color: #ffffff;
+        }
+
+        .hero {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 10rem 2rem 6rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-visual {
+            position: relative;
+        }
+
+        .visual-container {
+            position: relative;
+            aspect-ratio: 1;
+            background: var(--color-surface);
+            border: 2px solid var(--color-secondary);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(255, 107, 53, 0.3);
+        }
+
+        .visual-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(0, 255, 245, 0.05), rgba(124, 58, 237, 0.05));
+            font-size: 6rem;
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            box-shadow: 0 0 20px var(--color-secondary);
+            animation: scan 3s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+            0%, 100% { top: 0%; opacity: 0; }
+            50% { top: 100%; opacity: 1; }
+        }
+
+        .stats-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--color-primary);
+            box-shadow: 0 20px 40px rgba(0, 255, 245, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'IBM Plex Mono', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+        }
+
+        .mission-section {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mission-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .mission-content p {
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .mission-image {
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            border-radius: 24px;
+            overflow: hidden;
+            height: 500px;
+        }
+
+        .mission-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .applications-section {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+        }
+
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .app-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-secondary);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .app-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .app-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--color-secondary);
+            box-shadow: 0 24px 48px rgba(255, 107, 53, 0.3);
+        }
+
+        .app-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-card p {
+            color: var(--color-text-muted);
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-section {
+            max-width: 1200px;
+            margin: 6rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-container {
+            background: var(--color-surface);
+            border: 2px solid var(--color-secondary);
+            border-radius: 24px;
+            padding: 4rem;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.2);
+        }
+
+        .cta-container h2 {
+            margin-bottom: 1rem;
+        }
+
+        .cta-container p {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        footer {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 6rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand p {
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        .footer-section h4 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-secondary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--color-border);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 8rem;
+            }
+
+            .mission-container {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .applications-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-container {
+                padding: 2.5rem 1.5rem;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <header id="header">
+        <nav>
+            <a href="index.html" class="logo">MORO MOTION</a>
+            <ul class="nav-menu">
+                <li><a href="specifications.html">Specs</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="news.html">News</a></li>
+                <li><a href="investors.html">Investors</a></li>
+                <li><button class="theme-toggle" id="theme-toggle">🌙</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>
+                Engineering Humanoid Robots for Humanity's<br>
+                <span class="gradient-text">Toughest Challenges</span>
+            </h1>
+            <p class="hero-subtitle">
+                Building adaptive humanoid robots that operate in the world's most dangerous environments—so humans don't have to.
+            </p>
+            <div class="hero-cta">
+                <a href="specifications.html" class="btn btn-primary">Explore GLENN</a>
+                <a href="demo.html" class="btn btn-secondary">Request Demo</a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="visual-container">
+                <div class="visual-placeholder">🤖</div>
+                <div class="scan-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section reveal">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">180<span style="font-size: 2rem;">cm</span></div>
+                <div class="stat-label">Height</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">28</div>
+                <div class="stat-label">Degrees of Freedom</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15<span style="font-size: 2rem;">kg</span></div>
+                <div class="stat-label">Payload Capacity</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2-4<span style="font-size: 2rem;">hr</span></div>
+                <div class="stat-label">Battery Life</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mission-section reveal">
+        <div class="mission-container">
+            <div class="mission-content">
+                <div class="section-label">[ OUR MISSION ]</div>
+                <h2>
+                    A New Frontier for <span class="gradient-text">Safety</span>
+                </h2>
+                <p>
+                    Moro Motion's mission is simple: save lives by replacing humans in life-threatening tasks. We are creating the definitive platform for robotics in hazardous environments.
+                </p>
+                <p>
+                    From disaster response and bomb disposal to space exploration, we're building humanoid robots as an adaptable platform that merges human intuition with robotic resilience.
+                </p>
+            </div>
+            <div class="mission-image">
+                <div style="width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0, 255, 245, 0.1), rgba(124, 58, 237, 0.1)); display: flex; align-items: center; justify-content: center; font-size: 8rem;">🤖</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="applications-section reveal">
+        <div class="section-header">
+            <h2>Built for <span class="gradient-text">Extreme Environments</span></h2>
+            <p>One adaptable platform for humanity's most dangerous work</p>
+        </div>
+        <div class="applications-grid">
+            <div class="app-card">
+                <div class="app-icon">💣</div>
+                <h3>Bomb Disposal</h3>
+                <p>Safely disarm and manage explosive ordnances from a distance, protecting EOD personnel from life-threatening situations.</p>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🚨</div>
+                <h3>Disaster Response</h3>
+                <p>Navigate unstable environments to search, rescue, and deliver aid where human access is impossible or too dangerous.</p>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">☢️</div>
+                <h3>Hazardous Materials</h3>
+                <p>Handle toxic or radioactive materials without human exposure, ensuring safety in chemical and nuclear facilities.</p>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🚀</div>
+                <h3>Space Exploration</h3>
+                <p>Perform maintenance and exploration in extraterrestrial environments where human presence is limited or impossible.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section reveal">
+        <div class="cta-container">
+            <h2>Ready to Learn More About <span class="gradient-text">GLENN</span>?</h2>
+            <p>Discover detailed specifications, request a demo, or explore our comprehensive resources</p>
+            <div class="cta-buttons">
+                <a href="specifications.html" class="btn btn-primary">View Specifications</a>
+                <a href="resources.html" class="btn btn-secondary">Browse Resources</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">MORO MOTION</div>
+                <p>Engineering safer futures through humanoid robotics for extreme environments.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Product</h4>
+                <div class="footer-links">
+                    <a href="specifications.html">Specifications</a>
+                    <a href="resources.html">Resources</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <div class="footer-links">
+                    <a href="news.html">News</a>
+                    <a href="investors.html">Investors</a>
+                    <a href="index.html">About</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <div class="footer-links">
+                    <a href="mailto:contact@moromotion.com">Contact</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Moro Motion. All rights reserved. | Auburn University | NVA Accelerator</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            const toggle = document.getElementById('theme-toggle');
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            toggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('theme-toggle').textContent = savedTheme === 'light' ? '🌙' : '☀️';
+        });
+
+        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', reveal);
+        reveal();
+    </script>
+</body>
+</html>
