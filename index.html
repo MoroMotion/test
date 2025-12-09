@@ -298,14 +298,11 @@
             box-shadow: 0 25px 50px rgba(255, 107, 53, 0.3);
         }
 
-        .visual-placeholder {
+        .visual-container video {
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(0, 255, 245, 0.05), rgba(124, 58, 237, 0.05));
-            font-size: 6rem;
+            object-fit: cover;
+            display: block;
         }
 
         .scan-line {
@@ -315,6 +312,8 @@
             background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
             box-shadow: 0 0 20px var(--color-secondary);
             animation: scan 3s ease-in-out infinite;
+            top: 0;
+            left: 0;
         }
 
         @keyframes scan {
@@ -435,6 +434,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
         .applications-section {
@@ -495,6 +495,8 @@
             margin-bottom: 1.5rem;
             position: relative;
             z-index: 1;
+            font-weight: 700;
+            color: var(--color-secondary);
         }
 
         .app-card h3 {
@@ -657,11 +659,11 @@
         <nav>
             <a href="index.html" class="logo">MORO MOTION</a>
             <ul class="nav-menu">
-                <li><a href="coming.html">Specs</a></li>
-                <li><a href="resources.html">Resources</a></li>
-                <li><a href="news.html">News</a></li>
-                <li><a href="investors.html">Investors</a></li>
-                <li><button class="theme-toggle" id="theme-toggle">🌙</button></li>
+                <li><a href="specifications.html">Specs</a></li>
+                <li><a href="coming-soon.html">Resources</a></li>
+                <li><a href="coming-soon.html">News</a></li>
+                <li><a href="coming-soon.html">Investors</a></li>
+                <li><button class="theme-toggle" id="theme-toggle">◐</button></li>
             </ul>
         </nav>
     </header>
@@ -677,13 +679,15 @@
             </p>
             <div class="hero-cta">
                 <a href="specifications.html" class="btn btn-primary">Explore GLENN</a>
-                <a href="demo.html" class="btn btn-secondary">Request Demo</a>
+                <a href="coming-soon.html" class="btn btn-secondary">Request Demo</a>
             </div>
         </div>
 
         <div class="hero-visual">
             <div class="visual-container">
-                <div class="visual-placeholder">🤖</div>
+                <video autoplay loop muted playsinline>
+                    <source src="hero-video.mp4" type="video/mp4">
+                </video>
                 <div class="scan-line"></div>
             </div>
         </div>
@@ -725,7 +729,7 @@
                 </p>
             </div>
             <div class="mission-image">
-                <div style="width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0, 255, 245, 0.1), rgba(124, 58, 237, 0.1)); display: flex; align-items: center; justify-content: center; font-size: 8rem;">🤖</div>
+                <img src="robot-and-landmine.png" alt="GLENN Robot near landmine">
             </div>
         </div>
     </section>
@@ -737,22 +741,22 @@
         </div>
         <div class="applications-grid">
             <div class="app-card">
-                <div class="app-icon">💣</div>
+                <div class="app-icon">⬢</div>
                 <h3>Bomb Disposal</h3>
                 <p>Safely disarm and manage explosive ordnances from a distance, protecting EOD personnel from life-threatening situations.</p>
             </div>
             <div class="app-card">
-                <div class="app-icon">🚨</div>
+                <div class="app-icon">⚡</div>
                 <h3>Disaster Response</h3>
                 <p>Navigate unstable environments to search, rescue, and deliver aid where human access is impossible or too dangerous.</p>
             </div>
             <div class="app-card">
-                <div class="app-icon">☢️</div>
+                <div class="app-icon">◉</div>
                 <h3>Hazardous Materials</h3>
                 <p>Handle toxic or radioactive materials without human exposure, ensuring safety in chemical and nuclear facilities.</p>
             </div>
             <div class="app-card">
-                <div class="app-icon">🚀</div>
+                <div class="app-icon">✦</div>
                 <h3>Space Exploration</h3>
                 <p>Perform maintenance and exploration in extraterrestrial environments where human presence is limited or impossible.</p>
             </div>
@@ -765,7 +769,7 @@
             <p>Discover detailed specifications, request a demo, or explore our comprehensive resources</p>
             <div class="cta-buttons">
                 <a href="specifications.html" class="btn btn-primary">View Specifications</a>
-                <a href="resources.html" class="btn btn-secondary">Browse Resources</a>
+                <a href="coming-soon.html" class="btn btn-secondary">Browse Resources</a>
             </div>
         </div>
     </section>
@@ -780,14 +784,14 @@
                 <h4>Product</h4>
                 <div class="footer-links">
                     <a href="specifications.html">Specifications</a>
-                    <a href="resources.html">Resources</a>
+                    <a href="coming-soon.html">Resources</a>
                 </div>
             </div>
             <div class="footer-section">
                 <h4>Company</h4>
                 <div class="footer-links">
-                    <a href="news.html">News</a>
-                    <a href="investors.html">Investors</a>
+                    <a href="coming-soon.html">News</a>
+                    <a href="coming-soon.html">Investors</a>
                     <a href="index.html">About</a>
                 </div>
             </div>
@@ -801,7 +805,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2024 Moro Motion. All rights reserved. | Auburn University | NVA Accelerator</p>
+            <p>© 2025 Moro Motion. All rights reserved.</p>
         </div>
     </footer>
 
@@ -814,13 +818,13 @@
             
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-            toggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            toggle.textContent = newTheme === 'light' ? '◐' : '○';
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
-            document.getElementById('theme-toggle').textContent = savedTheme === 'light' ? '🌙' : '☀️';
+            document.getElementById('theme-toggle').textContent = savedTheme === 'light' ? '◐' : '○';
         });
 
         document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
